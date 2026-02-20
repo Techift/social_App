@@ -9,27 +9,24 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
-@override
+  @override
   void initState() {
     super.initState();
-
     Future.delayed(Duration(seconds: 5),(){
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OnboardingScreen(),));
     });
   }
-  
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
-      backgroundColor: Colors.pink[200],
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
+      body: Stack(
+        children: [
+          SizedBox.expand(
+            child: Image.asset('assets/images/cool.jpg', fit: BoxFit.cover),
+          ),
+
+          Center(
+            child: Text(
               'Me2U',
               style: TextStyle(
                 color: Colors.white,
@@ -37,8 +34,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
