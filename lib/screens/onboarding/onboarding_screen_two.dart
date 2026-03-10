@@ -30,7 +30,7 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo> {
               bottomRight: Radius.circular(30),
             ),
             child: Image.asset(
-              'assets/images/cool.jpg',
+              'assets/images/screen2.png',
               width: double.infinity,
               height: 300,
               fit: BoxFit.cover,
@@ -65,17 +65,14 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo> {
               ),
             ),
 
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 30,
-                    horizontal: 16,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: TextButton(
                         onPressed: () {
                           Navigator.pushReplacement(
                             context,
@@ -91,33 +88,31 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo> {
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                ),
-
-                SizedBox(width: 140),
-                Padding(
-                  padding: const EdgeInsets.all(14.0),
-                  child: SizedBox(
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(
-                          Colors.pink[400],
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => OnboardingScreenThree(),
-                          ),
-                        );
-                      },
-                      child: Icon(Icons.arrow_forward, color: Colors.white),
                     ),
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(
+                            Colors.pink[400],
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => OnboardingScreenThree(),
+                            ),
+                          );
+                        },
+                        child: const Icon(Icons.arrow_forward, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

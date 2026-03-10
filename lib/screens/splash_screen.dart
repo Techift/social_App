@@ -22,20 +22,9 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Stack(
         children: [
           SizedBox.expand(
-            child: Image.asset('assets/images/cool.jpg', fit: BoxFit.cover),
+            child: Image.asset('assets/images/me2u_im.jpeg', fit: BoxFit.cover),
           ),
-
-          Center(
-            child: Text(
-              'Me2U',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 45,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
+        ], 
       ),
     );
   }
