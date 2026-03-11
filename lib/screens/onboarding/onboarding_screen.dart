@@ -17,11 +17,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // SizedBox(
-            //   height: MediaQuery.of(context).size.height * 0.45,
-            //   width: double.infinity,
-            //   child: Image.asset('assets/images/cool.jpg', fit: BoxFit.cover),
-            // ),
              ClipRRect(
             borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(30),

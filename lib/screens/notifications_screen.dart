@@ -7,8 +7,16 @@ class NotificationsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     const babyPink = Color(0xFFFFB6C1);
 
-    return SafeArea(
-      child: ListView(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Notifications',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: babyPink.withValues(alpha: 0.9),
+        elevation: 0,
+      ),
+      body: ListView(
         padding: const EdgeInsets.all(12),
         children: List.generate(
           8,

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:social_app/screens/feed_screen.dart';
-import 'package:social_app/screens/search_screen.dart';
-import 'package:social_app/screens/create_post_screen.dart';
+import 'package:social_app/screens/messages_screen.dart';
 import 'package:social_app/screens/notifications_screen.dart';
 import 'package:social_app/screens/profile_screen.dart';
 import 'package:social_app/services/auth_service.dart';
 import 'package:social_app/screens/auth/login.dart';
-import 'package:social_app/models/user_story.dart';
+import 'package:provider/provider.dart';
+import 'package:social_app/provider/post_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,59 +18,90 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   final _authService = AuthService();
-
-  // Sample user stories data
-  final List<UserStory> stories = [
-    UserStory(
-      username: 'your_story',
-      imageUrl: 'assets/images/screen1.png',
-      isViewed: false,
-    ),
-    UserStory(
-      username: 'jane_smith',
-      imageUrl: 'assets/images/screen2.png',
-      isViewed: true,
-    ),
-    UserStory(
-      username: 'alex_jones',
-      imageUrl: 'assets/images/screen3.png',
-      isViewed: false,
-    ),
-    UserStory(
-      username: 'emma_wilson',
-      imageUrl: 'assets/images/screen1.png',
-      isViewed: false,
-    ),
-    UserStory(
-      username: 'john_doe',
-      imageUrl: 'assets/images/screen1.png',
-      isViewed: false,
-    ),
-    UserStory(
-      username: 'john_doe',
-      imageUrl: 'assets/images/screen3.png',
-      isViewed: false,
-    ),
-    UserStory(
-      username: 'john_doe',
-      imageUrl: 'assets/images/screen2.png',
-      isViewed: false,
-    ),
-  ];
+  final _postController = TextEditingController();
 
   late List<Widget> _pages;
 
   @override
   void initState() {
     super.initState();
-    // Initialize pages
-    _pages = const [
-      FeedScreen(),
-      SearchScreen(),
-      CreatePostScreen(),
-      NotificationsScreen(),
-      ProfileScreen(),
+    _pages = [
+       FeedScreen(),
+      MessagesScreen(),
+      const NotificationsScreen(),
+      const ProfileScreen(),
     ];
+  }
+
+  void _showPostDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "Post",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _postController,
+              maxLines: 5,
+              decoration: InputDecoration(
+                hintText: "What's on your mind?",
+              ),
+            ),
+            SizedBox(height: 10),
+            // Placeholder for images
+            Container(
+              height: 30,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Center(
+                child: Text(
+                  'Image upload coming soon',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              if (_postController.text.isNotEmpty) {
+                context.read<PostProvider>().addPost(_postController.text);
+                _postController.clear();
+                Navigator.pop(context);
+              }
+            },
+            child: Text('Post'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _postController.dispose();
+    super.dispose();
   }
 
   @override
@@ -107,25 +138,24 @@ class _HomePageState extends State<HomePage> {
           ? AppBar(
               title: Text(
                 'Welcome, $username',
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 30),
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25),
               ),
               automaticallyImplyLeading: false,
               elevation: 0,
               backgroundColor: babyPink.withValues(alpha: 0.9),
               actions: [
-                PopupMenuButton(
-                  itemBuilder: (context) => [
-                    PopupMenuItem(value: 'logout', child: Text('Logout')),
-                  ],
-                  onSelected: (value) {
-                    if (value == 'logout') {
-                      _authService.logout();
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => Login()),
-                      );
-                    }
-                  },
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() => _currentIndex = 3);
+                    },
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.white,
+                      child: Icon(Icons.person, color: Colors.pink[300]),
+                    ),
+                  ),
                 ),
               ],
             )
@@ -133,67 +163,19 @@ class _HomePageState extends State<HomePage> {
       body: _currentIndex == 0
           ? Column(
               children: [
-                // User Stories Section
-                Container(
-                  height: 120,
-                  color: babyPink.withValues(alpha: 0.9),
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: stories.length,
-                    itemBuilder: (context, index) {
-                      final story = stories[index];
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            // Handle story tap
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'Viewing ${story.username}\'s story',
-                                ),
-                                duration: Duration(seconds: 1),
-                              ),
-                            );
-                          },
-                          child: Column(
-                            children: [
-                              Container(
-                                width: 60,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: story.isViewed
-                                        ? Colors.grey[400]!
-                                        : babyPink,
-                                    width: 3,
-                                  ),
-                                  image: DecorationImage(
-                                    image: AssetImage(story.imageUrl),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 8),
-                              SizedBox(
-                                width: 80,
-                                child: Text(
-                                  story.username,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
+                Divider(height: 1),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ElevatedButton(
+                    onPressed: () => _showPostDialog(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: babyPink,
+                      foregroundColor: Colors.white,
+                      minimumSize: Size(double.infinity, 50),
+                    ),
+                    child: Text('Create New Post'),
                   ),
                 ),
-                Divider(height: 1),
                 Expanded(child: IndexedStack(index: 0, children: [_pages[0]])),
               ],
             )
@@ -209,10 +191,9 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.home_outlined),
             label: 'Feed',
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_circle_outline),
-            label: 'Create',
+            icon: Icon(Icons.message_outlined),
+            label: 'Messages',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications_none),

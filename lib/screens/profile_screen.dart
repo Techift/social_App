@@ -1,41 +1,225 @@
 import 'package:flutter/material.dart';
+import 'package:social_app/screens/auth/login.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     const babyPink = Color(0xFFFFB6C1);
 
-    return SafeArea(
-      child: Column(
+    return Scaffold(
+      // key: _scaffoldKey,
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+        title: Row(
+          children: [
+            // Icon(Icons.arrow_back_ios),
+            Expanded(
+              child: Text(
+                'My Profile',
+                style: TextStyle(fontWeight: FontWeight.w500),
+              ),
+            ),
+            // TextButton(
+            //   onPressed: () {
+            //     _scaffoldKey.currentState!.openDrawer();
+            //   },
+            //   child: Text('Edit', style: TextStyle(color: Colors.black)),
+            // ),
+            TextButton(
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(20),
+                    ),
+                  ),
+                  builder: (context) {
+                    return Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            leading: const Icon(Icons.person),
+                            title: const Text("Edit Username"),
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+
+                          ListTile(
+                            leading: const Icon(Icons.edit),
+                            title: const Text("Edit Profile"),
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+
+                          ListTile(
+                            leading: const Icon(Icons.delete),
+                            title: const Text("Remove Photo"),
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.logout),
+                            title: const Text("Logout"),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => const Login()),
+                              );
+                            },
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+              child: const Text('Edit', style: TextStyle(color: Colors.black)),
+            ),
+          ],
+        ),
+        backgroundColor: babyPink.withValues(alpha: 0.9),
+        elevation: 0,
+      ),
+      // drawer: Drawer(
+      //   child: ListView(
+      //     children: [
+      //       ListTile(
+      //         leading: Icon(Icons.photo),
+      //         title: Text("Choose from Gallery"),
+      //         onTap: () {
+      //           Navigator.pop(context);
+      //         },
+      //       ),
+      //       ListTile(
+      //         leading: Icon(Icons.camera_alt),
+      //         title: Text("Take Photo"),
+      //         onTap: () {
+      //           Navigator.pop(context);
+      //         },
+      //       ),
+      //     ],
+      //   ),
+      // ),
+      body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Row(
+            child: Stack(
               children: [
-                const CircleAvatar(radius: 36, backgroundColor: babyPink, child: Icon(Icons.person, color: Colors.white, size: 36)),
-                const SizedBox(width: 16),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text('User Name', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                    SizedBox(height: 6),
-                    Text('I am a software developer', style: TextStyle(color: Colors.grey)),
+                Row(
+                  children: [
+                    // Positioned(
+                    //   bottom: -12,
+                    //   right: -12,
+                    //   // right: 20,
+                    //   child: Container(
+                    //     padding: EdgeInsets.all(4),
+                    //     decoration: BoxDecoration(
+                    //       color: Colors.red,
+                    //       shape: BoxShape.circle,
+                    //     ),
+                    //     child: Icon(Icons.camera_alt, size: 18),
+                    //   ),
+                    // ),
+                    CircleAvatar(
+                      radius: 55,
+                      backgroundImage: AssetImage("assets/images/screen2.png"),
+                    ),
+
+                    const SizedBox(width: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          'User Name',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                        SizedBox(height: 6),
+                        Text(
+                          'I am a software developer',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
                   ],
-                )
+                ),
               ],
             ),
           ),
-          const Divider(),
-          // Expanded(
-          //   child: GridView.builder(
-          //     padding: const EdgeInsets.all(12),
-          //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8),
-          //     itemCount: 18,
-          //     itemBuilder: (context, i) => Container(color: Colors.grey[300]),
-          //   ),
-          // )
+
+          SizedBox(height: 16),
+          ListTile(
+            title: Row(
+              children: [
+                Icon(Icons.email_outlined),
+                SizedBox(width: 16),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [Text('Email'), Text('johndoe@gmail.com')],
+                ),
+              ],
+            ),
+          ),
+          Divider(),
+          ListTile(
+            title: Row(
+              children: [
+                Icon(Icons.phone_android_outlined),
+                SizedBox(width: 16),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [Text('Phone'), Text('+1 (555) 123-4567')],
+                ),
+              ],
+            ),
+          ),
+          Divider(),
+          ListTile(
+            title: Row(
+              children: [
+                Icon(Icons.facebook_outlined),
+                SizedBox(width: 16),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [Text('Facebook'), Text('Add a Facebook account')],
+                ),
+              ],
+            ),
+          ),
+          Divider(),
+          ListTile(
+            title: Row(
+              children: [
+                Icon(Icons.location_on_outlined),
+                SizedBox(width: 16),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Location'),
+                    Text('123 Main Street, City, State 12345'),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

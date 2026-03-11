@@ -28,19 +28,6 @@ class _OnboardingScreenThreeState extends State<OnboardingScreenThree> {
               fit: BoxFit.cover,
             ),
           ),
-            // Container(
-            //   decoration: BoxDecoration(borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight: Radius.circular(20)),
-            //   image: DecorationImage(image: AssetImage('assets/images/cool.jpg'),fit: BoxFit.cover)
-            //   ),
-            // ),
-            // SizedBox(
-            //   height: MediaQuery.of(context).size.height * 0.45,
-            //   width: double.infinity,
-            //   child: Container(
-            //     decoration:BoxDecoration(borderRadius: BorderRadius.circular(20)),
-            //     child: Image.asset('assets/images/cool.jpg', fit: BoxFit.cover)
-            //     ),
-            // ),
 
             Expanded(
               child: Center(
