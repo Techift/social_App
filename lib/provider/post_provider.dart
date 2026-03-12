@@ -18,7 +18,7 @@ class PostProvider extends ChangeNotifier {
         id: DateTime.now().toString(),
         content: content,
         authorName: currentUser.username, // Use username for display
-        timestamp: DateTime.now(),
+        timestamp: DateTime.now(), userId: '', createdAt: null,
       ),
     );
     notifyListeners();

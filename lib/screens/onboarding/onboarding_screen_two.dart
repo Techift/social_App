@@ -69,7 +69,7 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo> {
                         onPressed: () {
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => Login()),
+                            MaterialPageRoute(builder: (context) => const LoginScreen()),
                           );
                         },
                         child: const Text(

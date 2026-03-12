@@ -78,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Navigator.pop(context);
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (context) => const Login()),
+                                MaterialPageRoute(builder: (context) => const LoginScreen()),
                               );
                             },
                           )

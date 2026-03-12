@@ -3,8 +3,8 @@ import 'package:social_app/models/user_model.dart';
 class AuthService {
   static final AuthService _instance = AuthService._internal();
   
-  late User? _currentUser;
-  final List<User> _registeredUsers = [];
+  late UserModel? _currentUser;
+  final List<UserModel> _registeredUsers = [];
 
   AuthService._internal();
 
@@ -13,7 +13,7 @@ class AuthService {
   }
 
   // Getters
-  User? get currentUser => _currentUser;
+  UserModel? get currentUser => _currentUser;
   bool get isLoggedIn => _currentUser != null;
 
   // Register a new user
@@ -33,11 +33,12 @@ class AuthService {
     }
 
     // Register new user
-    final newUser = User(
+    final newUser = UserModel(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
       username: username,
       email: email,
       phoneNumber: phoneNumber,
-      password: password,
+      password: password, createdAt: null,
     );
     _registeredUsers.add(newUser);
     _currentUser = newUser;
@@ -80,11 +81,12 @@ class AuthService {
       );
 
       if (userIndex != -1) {
-        _registeredUsers[userIndex] = User(
+        _registeredUsers[userIndex] = UserModel(
+          id: _registeredUsers[userIndex].id,
           username: _registeredUsers[userIndex].username,
           email: _registeredUsers[userIndex].email,
           phoneNumber: _registeredUsers[userIndex].phoneNumber,
-          password: newPassword,
+          password: newPassword, createdAt: null,
         );
         return true;
       }

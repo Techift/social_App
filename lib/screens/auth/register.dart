@@ -1,251 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:social_app/pages/home_page.dart';
-import 'package:social_app/screens/auth/login.dart';
-import 'package:social_app/services/auth_service.dart';
-import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import '../../controllers/auth_controller.dart';
+import '../../utils/validators.dart';
+import '../../utils/constants.dart';
+import '../../routes/app_routes.dart';
 
-class Register extends StatefulWidget {
-  const Register({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
-  State<Register> createState() => _RegisterState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterState extends State<Register> {
-  final _usernameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _phoneController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _authService = AuthService();
-  String _errorMessage = '';
+class _RegisterScreenState extends State<RegisterScreen> {
+  late TextEditingController _usernameController;
+  late TextEditingController _emailController;
+  late TextEditingController _phoneController;
+  late TextEditingController _passwordController;
+  final _formKey = GlobalKey<FormState>();
+  bool _obscurePassword = true;
+  final authController = Get.find<AuthController>();
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(automaticallyImplyLeading: true),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 0),
-        child: SingleChildScrollView(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Register your account',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.pink[500],
-                    ),
-                  ),
-                  SizedBox(height: 30),
-                  if (_errorMessage.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 15),
-                      child: Text(
-                        _errorMessage,
-                        style: TextStyle(color: Colors.red, fontSize: 14),
-                      ),
-                    ),
-                  TextFormField(
-                    controller: _usernameController,
-                    decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      hintText: 'Username',
-                      prefixIcon: Icon(Icons.person),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(color: Colors.white30),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: const Color.fromARGB(255, 199, 198, 198),
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.pink),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 30),
-                  TextFormField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      prefixIcon: Icon(Icons.mail),
-                      hintText: 'Email',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(color: Colors.white12),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: const Color.fromARGB(255, 199, 198, 198),
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.pink),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 30),
-                  TextFormField(
-                    controller: _phoneController,
-                    keyboardType: TextInputType.phone,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      prefixIcon: Icon(Icons.phone),
-                      hintText: 'Phone Number',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide.none,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: const Color.fromARGB(255, 199, 198, 198),
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.pink),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 30),
-                  TextFormField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      hintText: 'Password',
-                      prefixIcon: Icon(Icons.lock),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide.none,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: const Color.fromARGB(255, 199, 198, 198),
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.pink),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 30),
-                  Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Already have an account?'),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return Login();
-                                },
-                              ),
-                            );
-                          },
-                          child: Text(
-                            'Login',
-                            style: TextStyle(color: Colors.pink[200]),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  ElevatedButton(
-                    onPressed: () {
-                      _handleRegister();
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(Colors.pink[500]),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 10.0, right: 10),
-                      child: Text(
-                        'Register',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _handleRegister() {
-    final username = _usernameController.text.trim();
-    final email = _emailController.text.trim();
-    final phone = _phoneController.text.trim();
-    final password = _passwordController.text.trim();
-
-    if (username.isEmpty || email.isEmpty || phone.isEmpty || password.isEmpty) {
-      setState(() {
-        _errorMessage = 'Please fill in all fields';
-      });
-      return;
-    }
-
-    if (username.length < 4) {
-      setState(() {
-        _errorMessage = 'Username must be at least 4 characters';
-      });
-      return;
-    }
-
-    if (!email.contains('@')) {
-      setState(() {
-        _errorMessage = 'Please enter a valid email';
-      });
-      return;
-    }
-
-    if (password.length < 6) {
-      setState(() {
-        _errorMessage = 'Password must be at least 6 characters';
-      });
-      return;
-    }
-
-    final isRegistered =
-        _authService.register(username, email, phone, password);
-    if (isRegistered) {
-      setState(() {
-        _errorMessage = '';
-      });
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
-    } else {
-      setState(() {
-        _errorMessage = 'Registration failed. Email may already be in use';
-      });
-    }
+  void initState() {
+    super.initState();
+    _usernameController = TextEditingController();
+    _emailController = TextEditingController();
+    _phoneController = TextEditingController();
+    _passwordController = TextEditingController();
   }
 
   @override
@@ -255,5 +37,144 @@ class _RegisterState extends State<Register> {
     _phoneController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _handleRegister() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    await authController.register(
+      username: _usernameController.text.trim(),
+      email: _emailController.text.trim(),
+      phoneNumber: _phoneController.text.trim(),
+      password: _passwordController.text,
+    );
+
+    if (authController.isLoggedIn) {
+      Get.offNamed(AppRoutes.home);
+    } else {
+      Get.snackbar(
+        'Error',
+        authController.error.value,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Create Account')),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(AppConstants.paddingLarge),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                Text(
+                  'Register your account',
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        color: Colors.pink[500],
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                const SizedBox(height: 30),
+                TextFormField(
+                  controller: _usernameController,
+                  decoration: InputDecoration(
+                    hintText: 'Username',
+                    prefixIcon: const Icon(Icons.person),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+                    ),
+                  ),
+                  validator: Validators.validateUsername,
+                ),
+                const SizedBox(height: 15),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    hintText: 'Email',
+                    prefixIcon: const Icon(Icons.mail),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+                    ),
+                  ),
+                  validator: Validators.validateEmail,
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 15),
+                TextFormField(
+                  controller: _phoneController,
+                  decoration: InputDecoration(
+                    hintText: 'Phone Number',
+                    prefixIcon: const Icon(Icons.phone),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+                    ),
+                  ),
+                  keyboardType: TextInputType.phone,
+                ),
+                const SizedBox(height: 15),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: _obscurePassword,
+                  decoration: InputDecoration(
+                    hintText: 'Password',
+                    prefixIcon: const Icon(Icons.lock),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                      onPressed: () {
+                        setState(() => _obscurePassword = !_obscurePassword);
+                      },
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+                    ),
+                  ),
+                  validator: Validators.validatePassword,
+                ),
+                const SizedBox(height: 30),
+                Obx(() {
+                  return authController.isLoading.value
+                      ? const CircularProgressIndicator()
+                      : ElevatedButton(
+                          onPressed: _handleRegister,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.pink[500],
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 50,
+                              vertical: 15,
+                            ),
+                          ),
+                          child: const Text(
+                            'Register',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        );
+                }),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Already have an account?'),
+                    TextButton(
+                      onPressed: () => Get.toNamed(AppRoutes.login),
+                      child: const Text('Login'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

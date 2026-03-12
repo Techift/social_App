@@ -1,203 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:social_app/pages/home_page.dart';
-import 'package:social_app/screens/auth/forgot_password.dart';
-import 'package:social_app/screens/auth/register.dart';
-import 'package:social_app/services/auth_service.dart';
+import 'package:get/get.dart';
+import '../../controllers/auth_controller.dart';
+import '../../utils/validators.dart';
+import '../../utils/constants.dart';
+import '../../routes/app_routes.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginState extends State<Login> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _authService = AuthService();
-  String _errorMessage = '';
+class _LoginScreenState extends State<LoginScreen> {
+  late TextEditingController _emailController;
+  late TextEditingController _passwordController;
+  final _formKey = GlobalKey<FormState>();
+  bool _obscurePassword = true;
+  final authController = Get.find<AuthController>();
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 30),
-        child: SingleChildScrollView(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Login to your account',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.pink[500],
-                    ),
-                  ),
-                  SizedBox(height: 50),
-                  if (_errorMessage.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 15),
-                      child: Text(
-                        _errorMessage,
-                        style: TextStyle(color: Colors.red, fontSize: 14),
-                      ),
-                    ),
-                  TextFormField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      hintText: 'Email',
-                      prefixIcon: Icon(Icons.mail),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide.none,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: const Color.fromARGB(255, 199, 198, 198),
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.pink),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 30),
-                  TextFormField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      hintText: 'Password',
-                      prefixIcon: Icon(Icons.lock),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                          color: const Color.fromARGB(255, 199, 198, 198),
-                        ),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide.none,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.pink),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 30),
-
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ForgotPassword(),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'Forgot Password?',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-
-                  SizedBox(height: 30),
-                  Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Don't have an account?"),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return Register();
-                                },
-                              ),
-                            );
-                          },
-                          child: Text(
-                            'Register',
-                            style: TextStyle(color: Colors.pink[200]),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  ElevatedButton(
-                    onPressed: () {
-                      _handleLogin();
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(Colors.pink[500]),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 10.0, right: 10),
-                      child: Text(
-                        'Login',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _handleLogin() {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text.trim();
-
-    if (email.isEmpty || password.isEmpty) {
-      setState(() {
-        _errorMessage = 'Please fill in all fields';
-      });
-      return;
-    }
-
-    if (!email.contains('@')) {
-      setState(() {
-        _errorMessage = 'Please enter a valid email';
-      });
-      return;
-    }
-
-    try {
-      final isLoggedIn = _authService.login(email, password);
-      if (isLoggedIn) {
-        setState(() {
-          _errorMessage = '';
-        });
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
-        );
-      } else {
-        setState(() {
-          _errorMessage = 'Login failed';
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _errorMessage = 'Invalid email or password';
-      });
-    }
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
   }
 
   @override
@@ -205,5 +31,118 @@ class _LoginState extends State<Login> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _handleLogin() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    await authController.login(
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+    );
+
+    if (authController.isLoggedIn) {
+      Get.offNamed(AppRoutes.home);
+    } else {
+      Get.snackbar(
+        'Error',
+        authController.error.value,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(AppConstants.paddingLarge),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 50),
+                Text(
+                  'Login to your account',
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        color: Colors.pink[500],
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                const SizedBox(height: 50),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    hintText: 'Email',
+                    prefixIcon: const Icon(Icons.mail),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+                    ),
+                  ),
+                  validator: Validators.validateEmail,
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 20),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: _obscurePassword,
+                  decoration: InputDecoration(
+                    hintText: 'Password',
+                    prefixIcon: const Icon(Icons.lock),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                      onPressed: () {
+                        setState(() => _obscurePassword = !_obscurePassword);
+                      },
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+                    ),
+                  ),
+                  validator: Validators.validatePassword,
+                ),
+                const SizedBox(height: 30),
+                Obx(() {
+                  return authController.isLoading.value
+                      ? const CircularProgressIndicator()
+                      : ElevatedButton(
+                          onPressed: _handleLogin,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.pink[500],
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 50,
+                              vertical: 15,
+                            ),
+                          ),
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        );
+                }),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Don't have an account?"),
+                    TextButton(
+                      onPressed: () => Get.toNamed(AppRoutes.register),
+                      child: const Text('Register'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

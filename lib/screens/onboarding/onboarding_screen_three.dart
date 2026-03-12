@@ -68,7 +68,7 @@ class _OnboardingScreenThreeState extends State<OnboardingScreenThree> {
                         onPressed: () {
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => Login()),
+                            MaterialPageRoute(builder: (context) => LoginScreen()),
                           );
                         },
                         child: const Text(
@@ -95,7 +95,7 @@ class _OnboardingScreenThreeState extends State<OnboardingScreenThree> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Login(),
+                              builder: (context) => const LoginScreen(),
                             ),
                           );
                         },
