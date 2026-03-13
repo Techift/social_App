@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:social_app/models/post_model.dart';
 import 'services/storage_service.dart';
 import 'routes/app_pages.dart';
 import 'routes/app_routes.dart';
@@ -7,7 +10,9 @@ import 'controllers/auth_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+  await Hive.initFlutter();
+  Hive.registerAdapter(PostModelAdapter());
+  await Hive.openBox<PostModel>('PostsBox');
   // Initialize storage
   await StorageService().init();
   

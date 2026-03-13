@@ -25,7 +25,7 @@ class _OnboardingScreenTwoState extends State<OnboardingScreenTwo> {
             child: Image.asset(
               'assets/images/screen2.png',
               width: double.infinity,
-              height: 300,
+              height: 350,
               fit: BoxFit.cover,
             ),
           ),

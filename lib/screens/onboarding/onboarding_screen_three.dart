@@ -24,7 +24,7 @@ class _OnboardingScreenThreeState extends State<OnboardingScreenThree> {
             child: Image.asset(
               'assets/images/screen3.png',
               width: double.infinity,
-              height: 300,
+              height: 350,
               fit: BoxFit.cover,
             ),
           ),

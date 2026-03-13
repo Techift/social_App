@@ -1,9 +1,12 @@
 import 'package:get/get.dart';
 import '../models/post_model.dart';
 import '../services/storage_service.dart';
+import 'package:image_picker/image_picker.dart';
+// import 'dart.io';
 
 class PostController extends GetxController {
   final storageService = StorageService();
+  final ImagePicker _picker = ImagePicker();
 
   final RxList<PostModel> posts = <PostModel>[].obs;
   final RxBool isLoading = false.obs;
@@ -35,15 +38,16 @@ class PostController extends GetxController {
         content: content,
         likes: 0,
         comments: 0,
-        imageUrls: imageUrls,
+        imageUrls: List.from(imageUrls ?? []),
         createdAt: DateTime.now(),
         updatedAt:  DateTime.now(), 
         timestamp: DateTime.now(), 
-        authorName: 'Current User',
+        authorName: 'current user',
       );
 
       await storageService.savePost(post);
       posts.insert(0, post);
+      // post.refresh();
       error.value = '';
     } catch (e) {
       error.value = e.toString();
@@ -58,5 +62,17 @@ class PostController extends GetxController {
     } catch (e) {
       error.value = e.toString();
     }
+  }
+
+  Future<List<String>?> pickImages() async {
+    try {
+      final List<XFile>? pickedFiles = await _picker.pickMultiImage();
+      if (pickedFiles != null && pickedFiles.isNotEmpty) {
+        return pickedFiles.map((file) => file.path).toList();
+      }
+    } catch (e) {
+      error.value = e.toString();
+    }
+    return null;
   }
 }

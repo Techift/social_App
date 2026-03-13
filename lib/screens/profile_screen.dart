@@ -17,7 +17,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       // key: _scaffoldKey,
       appBar: AppBar(
-        automaticallyImplyLeading: true,
+        // automaticallyImplyLeading: true,
         title: Row(
           children: [
             // Icon(Icons.arrow_back_ios),
