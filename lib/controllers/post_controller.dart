@@ -27,17 +27,19 @@ class PostController extends GetxController {
     }
   }
 
-  Future<void> createPost(String content, List<String>? imageUrls) async {
+  Future<void> createPost(String content, List<String>? imageUrls, String userId) async {
     try {
       final post = PostModel(
         id: DateTime.now().toString(),
-        userId: 'current_user_id',
+        userId: userId,
         content: content,
         likes: 0,
         comments: 0,
         imageUrls: imageUrls,
         createdAt: DateTime.now(),
-        updatedAt: null, timestamp: DateTime.now(), authorName: 'Current User',
+        updatedAt:  DateTime.now(), 
+        timestamp: DateTime.now(), 
+        authorName: 'Current User',
       );
 
       await storageService.savePost(post);

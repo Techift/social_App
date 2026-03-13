@@ -1,24 +1,38 @@
 // import 'package:flutter/material.dart';
+// import 'package:http/http.dart';
 // import 'package:social_app/screens/feed_screen.dart';
 // import 'package:social_app/screens/messages_screen.dart';
 // import 'package:social_app/screens/notifications_screen.dart';
 // import 'package:social_app/screens/profile_screen.dart';
 // import 'package:social_app/services/auth_service.dart';
 // import 'package:social_app/screens/auth/login.dart';
-// import 'package:provider/provider.dart';
-// import 'package:social_app/provider/post_provider.dart';
+// // import 'package:provider/provider.dart';
+// // import 'package:social_app/provider/post_provider.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import '../../controllers/auth_controller.dart';
+// import '../../controllers/post_controller.dart';
+// import '../../routes/app_routes.dart';
 
-// class HomePage extends StatefulWidget {
-//   const HomePage({super.key});
+// // class _HomeScreenState extends State<HomeScreen> {
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     final authController = Get.find<AuthController>();
+// //     final postController = Get.find<PostController>();
+
+
+// class HomeScreen extends StatefulWidget {
+//   const HomeScreen({super.key});
 
 //   @override
-//   State<HomePage> createState() => _HomePageState();
+//   State<HomeScreen> createState() => _HomeScreenState();
 // }
 
-// class _HomePageState extends State<HomePage> {
+// class _HomeScreenState extends State<HomeScreen> {
 //   int _currentIndex = 0;
-//   final _authService = AuthService();
 //   final _postController = TextEditingController();
+//    final authController = Get.find<AuthController>();
+//   // final postController = Get.find<PostController>();
 
 //   late List<Widget> _pages;
 
@@ -122,7 +136,7 @@
 //                 onPressed: () {
 //                   Navigator.pushReplacement(
 //                     context,
-//                     MaterialPageRoute(builder: (context) => Login()),
+//                     MaterialPageRoute(builder: (context) => LoginScreen()),
 //                   );
 //                 },
 //                 child: Text('Go to Login'),
@@ -211,86 +225,209 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:social_app/screens/feed_screen.dart';
+import 'package:social_app/screens/messages_screen.dart';
+import 'package:social_app/screens/notifications_screen.dart';
+import 'package:social_app/screens/profile_screen.dart';
 import '../../controllers/auth_controller.dart';
 import '../../controllers/post_controller.dart';
-import '../../routes/app_routes.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final authController = Get.find<AuthController>();
-    final postController = Get.find<PostController>();
+  State<HomeScreen> createState() => _HomeScreenState();
+}
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Me2U'),
-        centerTitle: true,
+class _HomeScreenState extends State<HomeScreen> {
+  int _currentIndex = 0;
+  final TextEditingController _postController = TextEditingController();
+  
+  // Find your controllers
+  final authController = Get.find<AuthController>();
+  final postController = Get.find<PostController>();
+
+  late List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      FeedScreen(),
+      MessagesScreen(),
+      const NotificationsScreen(),
+      const ProfileScreen(),
+    ];
+  }
+
+  void _showPostDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "Create Post",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _postController,
+              maxLines: 5,
+              decoration: const InputDecoration(
+                hintText: "What's on your mind?",
+                border:UnderlineInputBorder(borderSide: BorderSide.none)
+              ),
+            ),
+            const SizedBox(height: 10),
+            Container(
+              height: 40,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Center(
+                child: Text(
+                  'Image upload coming soon',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+            ),
+          ],
+        ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
             onPressed: () {
-              authController.logout();
-              Get.offNamed(AppRoutes.login);
+              if (_postController.text.isNotEmpty) {
+                final userId = authController.currentUser.value!.id;
+                // Fixed: Using GetX Controller instead of Provider
+                postController.createPost(_postController.text.trim(), null, userId); 
+                _postController.clear();
+                Navigator.pop(context);
+                print('posted');
+              }
             },
+            child: const Text('Post'),
           ),
         ],
       ),
-      body: Obx(() {
-        if (postController.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (postController.posts.isEmpty) {
-          return const Center(
-            child: Text('No posts yet. Be the first to post!'),
-          );
-        }
-
-        return ListView.builder(
-          itemCount: postController.posts.length,
-          itemBuilder: (context, index) {
-            final post = postController.posts[index];
-            return Card(
-              margin: const EdgeInsets.all(8),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      post.content,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.favorite_border),
-                            const SizedBox(width: 4),
-                            Text('${post.likes}'),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Icon(Icons.comment_outlined),
-                            const SizedBox(width: 4),
-                            Text('${post.comments}'),
-                          ],
-                        ),
-                        const Icon(Icons.share_outlined),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      }),
     );
+  }
+
+  @override
+  void dispose() {
+    _postController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    const babyPink = Color(0xFFFFB6C1);
+
+    // GetX Obx allows this UI to react if the user logs out suddenly
+    return Obx(() {
+      // Check if user is logged in using your AuthController logic
+      if (authController.currentUser.value == null) {
+        return Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Please log in to continue'),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () => Get.offAllNamed('/login'), // Using GetX routing
+                  child: const Text('Go to Login'),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+
+      final username = authController.currentUser.value?.username ?? 'User';
+
+      return Scaffold(
+        appBar: _currentIndex == 0
+            ? AppBar(
+                title: Text(
+                  'Welcome, $username',
+                  style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 22),
+                ),
+                automaticallyImplyLeading: false,
+                elevation: 0,
+                backgroundColor: babyPink,
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: GestureDetector(
+                      onTap: () => setState(() => _currentIndex = 3),
+                      child: const CircleAvatar(
+                        radius: 18,
+                        backgroundColor: Colors.white,
+                        child: Icon(Icons.person, color: babyPink),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : null,
+        body: IndexedStack(
+          index: _currentIndex,
+          children: [
+            // Feed View with the "Create Post" button at the top
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ElevatedButton(
+                    onPressed: () => _showPostDialog(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: babyPink,
+                      foregroundColor: Colors.white,
+                      minimumSize: const Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                    child: const Text('Create New Post'),
+                  ),
+                ),
+                const Divider(height: 1),
+                Expanded(child: _pages[0]),
+              ],
+            ),
+            _pages[1],
+            _pages[2],
+            _pages[3],
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: babyPink,
+          unselectedItemColor: Colors.grey,
+          onTap: (i) => setState(() => _currentIndex = i),
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: 'Feed'),
+            BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_outline), label: 'Messages'),
+            BottomNavigationBarItem(icon: Icon(Icons.notifications_none), label: 'Notifications'),
+            BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
+          ],
+        ),
+      );
+    });
   }
 }

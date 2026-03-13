@@ -13,11 +13,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final authController = Get.find<AuthController>();
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
   final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
-  final authController = Get.find<AuthController>();
+  
 
   @override
   void initState() {

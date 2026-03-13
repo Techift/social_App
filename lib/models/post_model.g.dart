@@ -24,7 +24,9 @@ class PostModelAdapter extends TypeAdapter<PostModel> {
       likes: fields[4] as int,
       comments: fields[5] as int,
       createdAt: fields[6] as DateTime?,
-      updatedAt: fields[7] as DateTime?, timestamp: null, authorName: '',
+      updatedAt: fields[7] as DateTime, 
+      timestamp: DateTime.now(), 
+      authorName: '',
     );
   }
 

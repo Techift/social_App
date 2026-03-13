@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../controllers/auth_controller.dart';
-import '../../routes/app_routes.dart';
+import 'package:social_app/screens/onboarding/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -11,6 +10,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+
   @override
   void initState() {
     super.initState();
@@ -20,15 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _navigateAfterDelay() async {
     await Future.delayed(const Duration(seconds: 3));
 
-    // Initialize storage
-    final authController = Get.put(AuthController());
-    
-    // Check if user is logged in
-    if (authController.isLoggedIn) {
-      Get.offNamed(AppRoutes.home);
-    } else {
-      Get.offNamed(AppRoutes.login);
-    }
+    Get.off(() => const OnboardingScreen());
   }
 
   @override
@@ -40,16 +32,6 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Image.asset(
               'assets/images/me2u_im.jpeg',
               fit: BoxFit.cover,
-            ),
-          ),
-          const Center(
-            child: Text(
-              'Me2U',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 45,
-                fontWeight: FontWeight.bold,
-              ),
             ),
           ),
         ],

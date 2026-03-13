@@ -28,6 +28,12 @@ class PostModel {
   @HiveField(7)
   final DateTime? updatedAt;
 
+  @HiveField(8)
+  final String authorName;
+
+  @HiveField(9)
+  final DateTime? timestamp;
+
 
   PostModel({
     required this.id,
@@ -38,9 +44,9 @@ class PostModel {
     this.comments = 0,
     required this.createdAt,
     this.updatedAt,
-    required DateTime? timestamp,
-    required String authorName,
-  });
+    required this.authorName, 
+     DateTime? timestamp,
+  }): timestamp = timestamp ?? DateTime.now(); 
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
