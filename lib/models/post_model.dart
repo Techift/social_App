@@ -1,38 +1,39 @@
 import 'package:hive/hive.dart';
+import 'package:social_app/models/comment_model.dart';
 
 part 'post_model.g.dart';
 
 @HiveType(typeId: 1)
-class PostModel {
+class PostModel extends HiveObject{
   @HiveField(0)
-  final String id;
+   String id;
 
   @HiveField(1)
-  final String userId;
+   String userId;
 
   @HiveField(2)
-  final String content;
+   String content;
 
   @HiveField(3)
-  final List<String>? imageUrls;
+   List<String>? imageUrls;
 
   @HiveField(4)
-  final int likes;
+   List<String> likes;
 
   @HiveField(5)
-  final int comments;
+   List <CommentModel> comments;
 
   @HiveField(6)
-  final DateTime? createdAt;
+   DateTime? createdAt;
 
   @HiveField(7)
-  final DateTime? updatedAt;
+   DateTime? updatedAt;
 
   @HiveField(8)
-  final String authorName;
+   String authorName;
 
   @HiveField(9)
-  final DateTime? timestamp;
+   DateTime? timestamp;
 
 
   PostModel({
@@ -40,8 +41,8 @@ class PostModel {
     required this.userId,
     required this.content,
     this.imageUrls,
-    this.likes = 0,
-    this.comments = 0,
+    this.likes = const [],
+    this.comments = const [],
     required this.createdAt,
     this.updatedAt,
     required this.authorName, 
@@ -54,8 +55,8 @@ class PostModel {
       userId: json['userId'] as String,
       content: json['content'] as String,
       imageUrls: List<String>.from(json['imageUrls'] as List? ?? []),
-      likes: json['likes'] as int? ?? 0,
-      comments: json['comments'] as int? ?? 0,
+      likes: List<String>.from(json['likes'] as List? ?? []),
+     comments: [],
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: json['updatedAt'] != null
           ? DateTime.parse(json['updatedAt'] as String)

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:social_app/widgets/comment_widget.dart';
 import '../controllers/post_controller.dart';
 import '../controllers/auth_controller.dart';
 
@@ -113,7 +114,29 @@ class FeedScreen extends StatelessWidget {
                           ),
                         ),
 
-                        Icon(Icons.more_horiz, color: Colors.grey[600]),
+                        PopupMenuButton<String>(
+                          icon: Icon(Icons.more_horiz, color: Colors.grey[600]),
+                          onSelected: (value) {
+                            if (value == 'edit') {
+                              // Call your edit post function
+                              postController.editPost(post);
+                            } else if (value == 'delete') {
+                              // Call your delete post function
+                              postController.deleteAllPost(post);
+                            }
+                          },
+                          itemBuilder: (BuildContext context) =>
+                              <PopupMenuEntry<String>>[
+                                const PopupMenuItem<String>(
+                                  value: 'edit',
+                                  child: Text('Edit Post'),
+                                ),
+                                const PopupMenuItem<String>(
+                                  value: 'delete',
+                                  child: Text('Delete Post'),
+                                ),
+                              ],
+                        ),
                       ],
                     ),
 
@@ -165,23 +188,61 @@ class FeedScreen extends StatelessWidget {
                     /// ACTIONS
                     Row(
                       children: [
-                        Icon(
-                          Icons.favorite_border,
-                          color: const Color.fromARGB(255, 249, 144, 160),
+                        IconButton(
+                          icon: Icon(
+                            post.likes.contains(
+                                  authController.currentUser.value!.id,
+                                )
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: Colors.red,
+                          ),
+                          onPressed: () {
+                            postController.toggleLike(
+                              post,
+                              authController.currentUser.value!.id,
+                            );
+                          },
                         ),
-                        const SizedBox(width: 8),
-                        Text('${post.likes}'),
+
+                        Text("${post.likes.length} likes"),
 
                         const SizedBox(width: 16),
 
-                        Icon(
-                          Icons.chat_bubble_outline,
-                          color: Colors.grey[600],
+                        IconButton(
+                          icon: Icon(
+                            Icons.chat_bubble_outline,
+                            color: Colors.grey[600],
+                          ),
+                          onPressed: () {
+                            postController.toggleCommentField(post);
+                          },
                         ),
-                        const SizedBox(width: 8),
-                        Text('${post.comments}'),
+                        Text("${post.comments.length} comments"),
+
+                        // Text('${post.comments}'),
                       ],
                     ),
+                    Column(
+                      children: post.comments.map((comment) {
+                        return ListTile(
+                          title: Text(comment.username),
+                          subtitle: Text(comment.content),
+                        );
+                      }).toList(),
+                    ),
+
+                    CommentInput(post: post),
+
+                    // 👇 COMMENT INPUT FIELD
+                    // 👇 COMMENT INPUT FIELD (reactive toggle)
+                    // Obx(() {
+                    //   if (postController.isCommentFieldVisible(post)) {
+                    //     return CommentInput(post: post);
+                    //   } else {
+                    //     return const SizedBox.shrink(); // hide when not active
+                    //   }
+                    // }),
                   ],
                 ),
               ),

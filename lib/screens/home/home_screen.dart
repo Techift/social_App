@@ -39,92 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
       const ProfileScreen(),
     ];
   }
-
-  // void _showPostDialog(BuildContext context) {
-  //   _selectedImages.clear();
-  //   showModalBottomSheet(
-  //     isScrollControlled: true,
-  //     context: context,
-  //     backgroundColor: Colors.white,
-  //     shape: const RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-  //     ),
-  //     builder: (context) => Padding(
-  //       padding: EdgeInsets.only(
-  //         bottom: MediaQuery.of(context).viewInsets.bottom,
-  //         left: 16,
-  //         right: 16,
-  //         top: 16,
-  //       ),
-  //       child: SingleChildScrollView(
-  //         child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           children: [
-  //             Row(
-  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //               children: [
-  //                 const Text(
-  //                   "Create Post",
-  //                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-  //                 ),
-  //                 IconButton(
-  //                   icon: const Icon(Icons.close),
-  //                   onPressed: () => Navigator.pop(context),
-  //                 ),
-  //               ],
-  //             ),
-  //             Column(
-  //               mainAxisSize: MainAxisSize.min,
-  //               children: [
-  //                 TextField(
-  //                   controller: _postController,
-  //                   maxLines: 5,
-  //                   decoration: const InputDecoration(
-  //                     hintText: "What's on your mind?",
-  //                     border: UnderlineInputBorder(borderSide: BorderSide.none),
-  //                   ),
-  //                 ),
-  //                 const SizedBox(height: 10),
-  //                 Container(
-  //                   height: 40,
-  //                   decoration: BoxDecoration(
-  //                     border: Border.all(color: Colors.grey.shade300),
-  //                     borderRadius: BorderRadius.circular(8),
-  //                   ),
-  //                   child: const Center(),
-  //                 ),
-  //               ],
-  //             ),
-
-  //             TextButton(
-  //               onPressed: () => Navigator.pop(context),
-  //               child: const Text('Cancel'),
-  //             ),
-  //             ElevatedButton(
-  //               onPressed: () {
-  //                 if (_postController.text.isNotEmpty ||
-  //                     _selectedImages.isNotEmpty) {
-  //                   final userId = authController.currentUser.value!.id;
-  //                   // Fixed: Using GetX Controller instead of Provider
-  //                   postController.createPost(
-  //                     _postController.text.trim(),
-  //                     _selectedImages,
-  //                     userId,
-  //                   );
-  //                   _postController.clear();
-  //                   _selectedImages.clear();
-  //                   Navigator.pop(context);
-  //                   print('posted');
-  //                 }
-  //               },
-  //               child: const Text('Post'),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
   void _showPostDialog(BuildContext context) {
     _selectedImages.clear(); // reset images every time
     showModalBottomSheet(
@@ -372,7 +286,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: ElevatedButton(
                     onPressed: () => _showPostDialog(context),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: babyPink,
+                      backgroundColor: const Color.fromARGB(255, 247, 110, 130),
                       foregroundColor: Colors.white,
                       minimumSize: const Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(

@@ -32,31 +32,31 @@ part 'user_model.g.dart';
 @HiveType(typeId: 0)
 class UserModel {
   @HiveField(0)
-  final String id;
+   String id;
   
   @HiveField(1)
-  final String username;
+   String username;
   
   @HiveField(2)
-  final String email;
+   String email;
   
   @HiveField(3)
-  final String? phoneNumber;
+   String? phoneNumber;
 
   @HiveField(4)
-  final String password;
+   String password;
   
   @HiveField(5)
-  final String? profileImage;
+   String? profileImage;
   
   @HiveField(6)
-  final String? bio;
+   String? bio;
   
   @HiveField(7)
-  final DateTime? createdAt;
+   DateTime? createdAt;
   
   @HiveField(8)
-  final DateTime? updatedAt;
+   DateTime? updatedAt;
 
   UserModel({
     required this.id,
@@ -73,7 +73,7 @@ class UserModel {
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['id'] as String,
-      username: json['username'] as String,
+      username:json['username']?.toString() ?? 'Unknown User',
       email: json['email'] as String,
       phoneNumber: json['phoneNumber'] as String?,
       profileImage: json['profileImage'] as String?,
