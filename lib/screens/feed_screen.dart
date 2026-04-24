@@ -29,8 +29,6 @@ class FeedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const babyPink = Color(0xFFFFB6C1);
-
     return SafeArea(
       child: Obx(() {
         final posts = postController.posts;
