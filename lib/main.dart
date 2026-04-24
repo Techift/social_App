@@ -9,22 +9,6 @@ import 'routes/app_pages.dart';
 import 'routes/app_routes.dart';
 import 'controllers/auth_controller.dart';
 
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await Hive.initFlutter();
-
-//   Hive.registerAdapter(UserModelAdapter());
-//   Hive.registerAdapter(PostModelAdapter());
-//   Hive.registerAdapter(CommentModelAdapter());
-//   await Hive.openBox<PostModel>('PostsBox');
-//   // Initialize storage
-//   await StorageService().init();
-//   await Hive.deleteBoxFromDisk('users');
-//   await Hive.deleteBoxFromDisk('posts');
-
-//   Get.put(AuthController());
-//   runApp(const MyApp());
-// }
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
