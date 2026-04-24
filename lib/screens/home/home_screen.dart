@@ -105,8 +105,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             onPressed: () async {
                               final images = await postController.pickImages();
-                              if (images != null)
+                              if (images != null){
                                 _selectedImages.addAll(images);
+                              }
                             },
                           ),
                         ],
@@ -121,15 +122,16 @@ class _HomeScreenState extends State<HomeScreen> {
                               // Add more button
                               return Padding(
                                 padding: const EdgeInsets.only(right: 8),
-                                child: Container(
+                                child: SizedBox(
                                   width: 50,
                                   height: 20,
                                   child: ElevatedButton(
                                     onPressed: () async {
                                       final images = await postController
                                           .pickImages();
-                                      if (images != null)
+                                      if (images != null){
                                         _selectedImages.addAll(images);
+                                        }
                                     },
                                     style: ElevatedButton.styleFrom(
                                       padding: EdgeInsets.zero,
