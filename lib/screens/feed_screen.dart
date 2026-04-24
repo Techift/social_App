@@ -233,16 +233,6 @@ class FeedScreen extends StatelessWidget {
                     ),
 
                     CommentInput(post: post),
-
-                    // 👇 COMMENT INPUT FIELD
-                    // 👇 COMMENT INPUT FIELD (reactive toggle)
-                    // Obx(() {
-                    //   if (postController.isCommentFieldVisible(post)) {
-                    //     return CommentInput(post: post);
-                    //   } else {
-                    //     return const SizedBox.shrink(); // hide when not active
-                    //   }
-                    // }),
                   ],
                 ),
               ),
