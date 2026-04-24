@@ -123,10 +123,10 @@ void addComment(PostModel post, CommentModel comment) {
 
   Future<List<String>?> pickImages() async {
     try {
-      final List<XFile>? pickedFiles = await _picker.pickMultiImage();
-      if (pickedFiles != null && pickedFiles.isNotEmpty) {
+      final List<XFile> pickedFiles = await _picker.pickMultiImage();
+       
         return pickedFiles.map((file) => file.path).toList();
-      }
+      
     } catch (e) {
       error.value = e.toString();
     }
