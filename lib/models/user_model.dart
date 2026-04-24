@@ -1,30 +1,3 @@
-// // part of 'user_model.g.dart';
-// class UserModel {
-//   final String id;
-//   final String username;
-//   final String email;
-//   final String phoneNumber;
-//   final String password;
-
-//   UserModel({
-//     required this.id,
-//     required this.username,
-//     required this.email,
-//     required this.phoneNumber,
-//     required this.password,
-//   });
-
-//    factory UserModel.fromJson(Map<String, dynamic> json) {
-//     return UserModel(
-//       id: json['id'] ?? '',
-//       username: json['username'] ?? '',
-//       email: json['email'] ?? '',
-//       phoneNumber: json['phoneNumber'] ?? '',
-//       password: json['password'] ?? '',
-//     );
-//   }
-// }
-
 import 'package:hive/hive.dart';
 
 part 'user_model.g.dart';
