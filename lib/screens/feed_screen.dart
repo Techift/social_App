@@ -116,10 +116,8 @@ class FeedScreen extends StatelessWidget {
                           icon: Icon(Icons.more_horiz, color: Colors.grey[600]),
                           onSelected: (value) {
                             if (value == 'edit') {
-                              // Call your edit post function
                               postController.editPost(post);
                             } else if (value == 'delete') {
-                              // Call your delete post function
                               postController.deleteAllPost(post);
                             }
                           },
@@ -217,8 +215,6 @@ class FeedScreen extends StatelessWidget {
                           },
                         ),
                         Text("${post.comments.length} comments"),
-
-                        // Text('${post.comments}'),
                       ],
                     ),
                     Column(
