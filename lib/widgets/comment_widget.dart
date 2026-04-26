@@ -10,7 +10,7 @@ class CommentInput extends StatelessWidget {
 
   final PostModel post;
 
-  CommentInput({required this.post});
+  CommentInput({super.key, required this.post});
 
   final TextEditingController commentController = TextEditingController();
 

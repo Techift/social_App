@@ -29,8 +29,6 @@ class FeedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const babyPink = Color(0xFFFFB6C1);
-
     return SafeArea(
       child: Obx(() {
         final posts = postController.posts;
@@ -118,10 +116,8 @@ class FeedScreen extends StatelessWidget {
                           icon: Icon(Icons.more_horiz, color: Colors.grey[600]),
                           onSelected: (value) {
                             if (value == 'edit') {
-                              // Call your edit post function
                               postController.editPost(post);
                             } else if (value == 'delete') {
-                              // Call your delete post function
                               postController.deleteAllPost(post);
                             }
                           },
@@ -219,8 +215,6 @@ class FeedScreen extends StatelessWidget {
                           },
                         ),
                         Text("${post.comments.length} comments"),
-
-                        // Text('${post.comments}'),
                       ],
                     ),
                     Column(
@@ -233,16 +227,6 @@ class FeedScreen extends StatelessWidget {
                     ),
 
                     CommentInput(post: post),
-
-                    // 👇 COMMENT INPUT FIELD
-                    // 👇 COMMENT INPUT FIELD (reactive toggle)
-                    // Obx(() {
-                    //   if (postController.isCommentFieldVisible(post)) {
-                    //     return CommentInput(post: post);
-                    //   } else {
-                    //     return const SizedBox.shrink(); // hide when not active
-                    //   }
-                    // }),
                   ],
                 ),
               ),

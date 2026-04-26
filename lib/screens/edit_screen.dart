@@ -9,7 +9,7 @@ import '../models/post_model.dart';
 class EditPostScreen extends StatefulWidget {
   final PostModel post;
 
-  const EditPostScreen({Key? key, required this.post}) : super(key: key);
+  const EditPostScreen({super.key,required this.post});
 
   @override
   State<EditPostScreen> createState() => _EditPostScreenState();

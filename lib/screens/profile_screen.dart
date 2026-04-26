@@ -9,30 +9,20 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     const babyPink = Color(0xFFFFB6C1);
 
     return Scaffold(
-      // key: _scaffoldKey,
       appBar: AppBar(
-        // automaticallyImplyLeading: true,
         title: Row(
           children: [
-            // Icon(Icons.arrow_back_ios),
             Expanded(
               child: Text(
                 'My Profile',
                 style: TextStyle(fontWeight: FontWeight.w500),
               ),
             ),
-            // TextButton(
-            //   onPressed: () {
-            //     _scaffoldKey.currentState!.openDrawer();
-            //   },
-            //   child: Text('Edit', style: TextStyle(color: Colors.black)),
-            // ),
             TextButton(
               onPressed: () {
                 showModalBottomSheet(
@@ -95,26 +85,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         backgroundColor: babyPink.withValues(alpha: 0.9),
         elevation: 0,
       ),
-      // drawer: Drawer(
-      //   child: ListView(
-      //     children: [
-      //       ListTile(
-      //         leading: Icon(Icons.photo),
-      //         title: Text("Choose from Gallery"),
-      //         onTap: () {
-      //           Navigator.pop(context);
-      //         },
-      //       ),
-      //       ListTile(
-      //         leading: Icon(Icons.camera_alt),
-      //         title: Text("Take Photo"),
-      //         onTap: () {
-      //           Navigator.pop(context);
-      //         },
-      //       ),
-      //     ],
-      //   ),
-      // ),
       body: Column(
         children: [
           Padding(
@@ -123,19 +93,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 Row(
                   children: [
-                    // Positioned(
-                    //   bottom: -12,
-                    //   right: -12,
-                    //   // right: 20,
-                    //   child: Container(
-                    //     padding: EdgeInsets.all(4),
-                    //     decoration: BoxDecoration(
-                    //       color: Colors.red,
-                    //       shape: BoxShape.circle,
-                    //     ),
-                    //     child: Icon(Icons.camera_alt, size: 18),
-                    //   ),
-                    // ),
                     CircleAvatar(
                       radius: 55,
                       backgroundImage: AssetImage("assets/images/screen2.png"),
