@@ -50,23 +50,23 @@ class PostModel extends HiveObject{
   }): timestamp = timestamp ?? DateTime.now(); 
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
-    return PostModel(
-      id: json['id'] as String,
-      userId: json['userId'] as String,
-      content: json['content'] as String,
-      imageUrls: List<String>.from(json['imageUrls'] as List? ?? []),
-      likes: List<String>.from(json['likes'] as List? ?? []),
-     comments: [],
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] != null
-          ? DateTime.parse(json['updatedAt'] as String)
-          : null,
-      timestamp: json['timestamp'] != null
-          ? DateTime.parse(json['timestamp'])
-          : DateTime.now(),
-      authorName: json['authorName'] ?? '',
-    );
-  }
+  return PostModel(
+    id: json['id'] as String,
+    userId: json['userId'] as String,
+    content: json['content'] as String,
+    imageUrls: List<String>.from(json['imageUrls'] ?? []),
+    likes: List<String>.from(json['likes'] ?? []),
+    comments: [],
+    createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
+    updatedAt: json['updatedAt'] != null
+        ? DateTime.tryParse(json['updatedAt'])
+        : null,
+    timestamp: json['timestamp'] != null
+        ? DateTime.tryParse(json['timestamp'])
+        : DateTime.now(),
+    authorName: json['authorName'] ?? '',
+  );
+}
 
   Map<String, dynamic> toJson() {
     return {
