@@ -43,21 +43,21 @@ class UserModel {
     this.updatedAt,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
-      id: json['id'] as String,
-      username:json['username']?.toString() ?? 'Unknown User',
-      email: json['email'] as String,
-      phoneNumber: json['phoneNumber'] as String?,
-      profileImage: json['profileImage'] as String?,
-      bio: json['bio'] as String?,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] != null
-          ? DateTime.parse(json['updatedAt'] as String)
-          : null, password: '',
-    );
-  }
-
+factory UserModel.fromJson(Map<String, dynamic> json) {
+  return UserModel(
+    id: json['id'] as String,
+    username: json['username']?.toString() ?? 'Unknown User',
+    email: json['email'] as String,
+    phoneNumber: json['phoneNumber'] as String?,
+    profileImage: json['profileImage'] as String?,
+    bio: json['bio'] as String?,
+    createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
+    updatedAt: json['updatedAt'] != null
+        ? DateTime.tryParse(json['updatedAt'])
+        : null,
+    password: '',
+  );
+}
   Map<String, dynamic> toJson() {
     return {
       'id': id,
